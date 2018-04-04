@@ -1,5 +1,6 @@
-import {login} from '../services/example';
+import login from '../services/example';
 import { routerRedux } from 'dva/router'
+import { stat } from 'fs';
 
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 console.log(login,'login');
@@ -11,7 +12,12 @@ export default {
     myState:0
   },
   subscriptions: {
-    setup ({ dispatch }) {
+    setup ({ dispatch,history }) {
+      history.listen((location)=>{
+        if(location.pathname==='/practice'){
+          dispatch({type:'addDoubleState'})
+        }
+      })
     },
   },
   effects: {
@@ -25,7 +31,9 @@ export default {
     },
     *practice(value,{call,put}){
       console.log(value,'传送过来的数据');
-      yield put({type:'changeState',value:'内部传送数据'})
+      yield put({type:'changeState',value:55})
+      yield call (delay,5000);
+      yield put(routerRedux.replace('','/practice'));
     }
   },
   reducers: {
@@ -40,10 +48,13 @@ export default {
       }
     },
     changeState(state,action){
-      console.log(state,action,'reduce中的action');
+      console.log(action,'reduce中的action');
       return {
-        ...state,myState:state.myState+1
+        ...state,myState:state.myState+action.value
       }
+    },
+    addDoubleState(state,action){
+      return {...state,myState:state.myState + 3}
     }
   },
 }
