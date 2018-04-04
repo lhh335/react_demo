@@ -1,4 +1,4 @@
-import login from '../services/example';
+import {login} from '../services/example';
 import { routerRedux } from 'dva/router'
 import { stat } from 'fs';
 
@@ -27,6 +27,11 @@ export default {
       yield call(delay,2000)
       yield put({ type: 'hideLoginLoading' })
       yield call(delay,1000)
+      const backData=yield call(login,{payload});
+      console.log(backData,'backdata');
+      if(backData.err!==undefined){
+          return;
+      }
       yield put(routerRedux.push('/main'))
     },
     *practice(value,{call,put}){

@@ -27,7 +27,7 @@ export function request(url, options) {
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
-       console.log(data,'从百度获得的数据');
+       console.log(data,'返回的数据');
      })
     .catch(err => ({ err }));
 }
