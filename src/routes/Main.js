@@ -52,12 +52,12 @@ class Sider extends React.Component {
       //   </div>
       // </div>
 
-      <div style={{display:'flex',height:'100%',width:'100%',flexDirection:'row'}}>
-        <div style={{width:240,background:this.state.theme=='dark'?'rgb(64,64,64)':'white',flexDirection:'column',display:'inline-flex'}}>
+      <div style={{display:'flex',height:'100%',width:'100%',flexDirection:'row',flexShrink:1}}>
+        <div style={{width:'30%',background:this.state.theme=='dark'?'rgb(64,64,64)':'white',flexDirection:'column',display:'inline-flex'}}>
           <Menu
             theme={this.state.theme}
             onClick={this.handleClick}
-            style={{ width: 240 }}
+            style={{ width: '100%' }}
             defaultOpenKeys={['sub1']}
             selectedKeys={[this.state.current]}
             mode="inline"
