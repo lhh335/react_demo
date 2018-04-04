@@ -14,17 +14,16 @@ const Login = ({
     validateFieldsAndScroll,
   }
 }) => {
-  console.log(app,'app');
   const {loginLoading} = app;
 
   var uri = 'https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png'
 
   function handleOk () {
     validateFieldsAndScroll((err,value)=>{
+      console.log(err,23232,value);
       if (err) {
         return
       }
-      console.log(value,'发送的value');
       dispatch({type:'app/login',payload:value})
     })
   }
@@ -33,7 +32,6 @@ const Login = ({
     <div style={styles.login}>
       <div style={styles.loginView}>
         <div style={styles.loginHead}>
-        <div>{app.loginLoading} 自己添加</div>
           <img style={styles.loginImg} src={uri}></img>
           <span style={styles.loginText}>Dva Login Test</span>
         </div>
@@ -53,7 +51,7 @@ const Login = ({
                 rules: [
                   {
                     required: true,
-                    hasFeedback:true
+                    hasFeedback:true,
                   },
                 ],
               })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="请输入密码" />)}

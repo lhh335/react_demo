@@ -3,7 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Link } from 'dva/router'
 import './main.css';
-
+import Menu1 from './sideMenu/Menu1';
+import Menu2 from './sideMenu/Menu2';
+import Menu3 from './sideMenu/Menu3';
+import Menu4 from './sideMenu/Menu4';
 import { Menu, Icon, Switch } from 'antd';
 const SubMenu = Menu.SubMenu;
 
@@ -18,13 +21,27 @@ class Sider extends React.Component {
     });
   }
   handleClick = (e) => {
-    console.log('click ', e);
     this.setState({
       current: e.key,
     });
+    this.props.dispatch({type:'main/selectedMenu',value:e.key})
   }
-
+    matchMenu=(menu)=>{
+      console.log(menu,'切换menu');
+      switch(Number(menu)){
+        case 1:
+          return <Menu1 />
+        case 2:
+          return <Menu2 />
+        case 3:
+          return <Menu3 />
+        case 4:
+          return <Menu4 />
+      }
+    }
   render() {
+    const {main,dispatch}=this.props;
+    console.log(main,'main');
     return (
       // <div style={{display:'flex',height:'100%',width:'100%',flexDirection:'row'}}>
       //   <div style={{display:'inline-flex',width:200,height:'100%',background:'red',flexDirection:'column'}}>
@@ -76,11 +93,18 @@ class Sider extends React.Component {
             />
           </div>
         </div>
+          <div style={{width:'auto',flexGrow:1,background:'#eee',fontSize:30}}>
+          {this.matchMenu(this.state.current)}
+          </div>
       </div>
     );
   }
 }
 
+Sider.PropTypes={
+  main:PropTypes.object,
+  dispatch:PropTypes.func
+}
 
 
 export default connect(({ main }) => ({ main }))(Sider)

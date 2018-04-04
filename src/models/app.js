@@ -35,23 +35,6 @@ export default {
       yield call (delay,5000);
       yield put(routerRedux.replace('','/practice'));
     },
-    *sideMenu(value,{call,put}){
-      console.log(999999,value);
-      switch(Number(value.value)){
-        case 1:
-        yield put(routerRedux.push('/menu1'));
-        break;
-        case 2:
-        yield put(routerRedux.replace('/practice','/menu1'));
-        break;
-        case 3:
-        yield put(routerRedux.replace());
-        break;
-        case 4:
-        yield put(routerRedux.replace());
-        break;                
-      }
-    }
   },
   reducers: {
     showLoginLoading (state) {
@@ -70,8 +53,5 @@ export default {
         ...state,myState:state.myState+action.value
       }
     },
-    addDoubleState(state,action){
-      return {...state,myState:state.myState + 3}
-    }
   },
 }
