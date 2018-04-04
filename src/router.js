@@ -4,16 +4,24 @@ import Login from './routes/Login';
 import Main from './routes/Main';
 import Path from './routes/path';
 import Practice from './routes/practice';
+import SideMenu from './routes/sideMenu/SideMenu';
+import Menu1 from './routes/sideMenu/Menu1';
 
 function RouterConfig({ history }) {
   return (
-    <Router history={history}>
+    <div>
+
+      <Router history={history}>
       <Route path="/" component={Login} />
       <Route path="/main" component={Main} />
       <Route path="/path" component={Path} />
       <Route path="/practice" component={Practice} />
+      <Route path="/sideMenu" component={SideMenu} />
+      <Route path="/menu1" component={Menu1} />
       
     </Router>
+    </div>
+    
   );
 }
 
