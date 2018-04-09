@@ -10,7 +10,8 @@ export default {
   state:
   {
     loginLoading:false,
-    myState:0
+    myState:0,
+    data:{}
   },
   subscriptions: {
     setup ({ dispatch,history }) {
@@ -33,10 +34,10 @@ export default {
       if(backdata.err!==undefined){
           return;
       }
+      yield put({type:'changeMsg',msg:backdata})
       yield put(routerRedux.push('/main'))
     },
     *practice(value,{call,put}){
-      console.log(value,'传送过来的数据');
       yield put({type:'changeState',value:55})
       yield call (delay,5000);
       yield put(routerRedux.replace('','/practice'));
@@ -54,10 +55,15 @@ export default {
       }
     },
     changeState(state,action){
-      console.log(action,'reduce中的action');
       return {
         ...state,myState:state.myState+action.value
       }
     },
+    changeMsg(state,action){
+      console.log(action,'msg');
+      return {
+        ...state,data:action.msg
+      }
+    }
   },
 }
