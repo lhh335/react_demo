@@ -1,6 +1,7 @@
 import fetch from 'dva/fetch';
 
 function parseJSON(response) {
+  console.log(response,'response');
   return response.json();
 }
 
@@ -22,12 +23,11 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export function request(url, options) {
-  console.log('请求数据');
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
-       console.log(data,'返回的数据');
+       return data;
      })
     .catch(err => ({ err }));
 }
