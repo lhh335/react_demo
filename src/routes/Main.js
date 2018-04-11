@@ -7,9 +7,18 @@ import Menu1 from './sideMenu/Menu1';
 import Menu2 from './sideMenu/Menu2';
 import Menu3 from './sideMenu/Menu3';
 import Menu4 from './sideMenu/Menu4';
-import { Menu, Icon, Switch } from 'antd';
+import { Menu, Icon, Switch, Carousel } from 'antd';
+const $ = require('jquery');
 const SubMenu = Menu.SubMenu;
-
+const styles = {
+  slider: {
+    height: '100%',
+    background: '#ccc',
+    fontSize: 30,
+    textAlign: 'center',
+    color: 'blue'
+  }
+}
 class Sider extends React.Component {
   state = {
     theme: 'dark',
@@ -24,86 +33,81 @@ class Sider extends React.Component {
     this.setState({
       current: e.key,
     });
-    this.props.dispatch({type:'main/selectedMenu',value:e.key})
+    this.props.dispatch({ type: 'main/selectedMenu', value: e.key })
   }
-    matchMenu=(menu)=>{
-      console.log(menu,'切换menu');
-      switch(Number(menu)){
-        case 1:
-          return <Menu1 />
-        case 2:
-          return <Menu2 />
-        case 3:
-          return <Menu3 />
-        case 4:
-          return <Menu4 />
-      }
+  matchMenu = (menu) => {
+    console.log(menu, '切换menu');
+    switch (Number(menu)) {
+      case 1:
+        return <Menu1 />
+      case 2:
+        return <Menu2 />
+      case 3:
+        return <Menu3 />
+      case 4:
+        return <Menu4 />
     }
-  render() {
-    const {main,dispatch}=this.props;
-    console.log(main,'main');
-    return (
-      // <div style={{display:'flex',height:'100%',width:'100%',flexDirection:'row'}}>
-      //   <div style={{display:'inline-flex',width:200,height:'100%',background:'red',flexDirection:'column'}}>
-      //     <div style={{flex:1,background:'blue'}}>
-      //     </div>
-      //     <div style={{display:'flex',flex:1,background:'yellow'}}>
-      //     </div>
-      //   </div>
-      // </div>
+  }
+  componentDidMount() {
+    const data_reactroot = $('[data-reactroot]')[0];
+    const root = $('#root');
+    console.log(root.get(0).offsetHeight);
+    data_reactroot.style.height = root.get(0).offsetHeight + 'px';
 
-      <div style={{display:'flex',height:'100%',width:'100%',flexDirection:'row',flexShrink:1}}>
-        <div style={{width:'30%',background:this.state.theme=='dark'?'rgb(64,64,64)':'white',flexDirection:'column',display:'inline-flex'}}>
-          <Menu
-            theme={this.state.theme}
-            onClick={this.handleClick}
-            style={{ width: '100%' }}
-            defaultOpenKeys={['sub1']}
-            selectedKeys={[this.state.current]}
-            mode="inline"
-          >
-            <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-              <Menu.Item key="1">Option 1</Menu.Item>
-              <Menu.Item key="2">Option 2</Menu.Item>
-              <Menu.Item key="3">Option 3</Menu.Item>
-              <Menu.Item key="4">Option 4</Menu.Item>
-              <Menu.Item key="5">
-                <Link to={'/path'}> {'asdas'}</Link>
-              </Menu.Item>
-            </SubMenu>
-            <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Navigtion Two</span></span>}>
-              <Menu.Item key="5">Option 5</Menu.Item>
-              <Menu.Item key="6">Option 6</Menu.Item>
-              <SubMenu key="sub3" title="Submenu">
-                <Menu.Item key="7">Option 7</Menu.Item>
-                <Menu.Item key="8">Option 8</Menu.Item>
+  }
+  render() {
+    const { main, dispatch } = this.props;
+    console.log(main, 'main');
+    return (
+      <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
+        <div  style={{ flex: '0 0 20%' ,background:'#abc'}}>
+          <Carousel autoplay style={{height:'100%'}}>
+            <div style={styles.slider}>1</div>
+            <div style={styles.slider}>2</div>
+            <div style={styles.slider}>3</div>
+            <div style={styles.slider}>4</div>
+          </Carousel>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', flex: "0 4 80%" }}>
+          <div style={{ flex: '0 1 10%', background: this.state.theme == 'dark' ? 'rgb(64,64,64)' : 'white', flexDirection: 'column', display: 'inline-flex' }}>
+            <Menu
+              theme={this.state.theme}
+              onClick={this.handleClick}
+              style={{ width: '100%' }}
+              defaultOpenKeys={['sub1']}
+              selectedKeys={[this.state.current]}
+              mode="inline"
+            >
+              <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
+                <Menu.Item key="1">Option 1</Menu.Item>
+                <Menu.Item key="2">Option 2</Menu.Item>
+                <Menu.Item key="3">Option 3</Menu.Item>
+                <Menu.Item key="4">Option 4</Menu.Item>
+                <Menu.Item key="5">
+                  <Link to={'/path'}> {'asdas'}</Link>
+                </Menu.Item>
               </SubMenu>
-            </SubMenu>
-            <SubMenu key="sub4" title={<span><Icon type="setting" /><span>Navigation Three</span></span>}>
-              <Menu.Item key="9">Option 9</Menu.Item>
-              <Menu.Item key="10">Option 10</Menu.Item>
-              <Menu.Item key="11">Option 11</Menu.Item>
-              <Menu.Item key="12">Option 12</Menu.Item>
-            </SubMenu>
-          </Menu>
-          <div style={{display:'flex',flex:1,alignItems:'flex-end',justifyContent:'flex-end'}}>
-            <Switch
-              checked={this.state.theme === 'dark'}
-              onChange={this.changeTheme}
-            />
+            </Menu>
+            <div style={{ display: 'flex', flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+              <Switch
+                checked={this.state.theme === 'dark'}
+                onChange={this.changeTheme}
+              />
+            </div>
+          </div>
+          <div style={{ flex: '0 9 90%', background: '#eee', fontSize: 30, alignSelf: 'stretch' }}>
+            {this.matchMenu(this.state.current)}
           </div>
         </div>
-          <div style={{width:'auto',flexGrow:1,background:'#eee',fontSize:30}}>
-          {this.matchMenu(this.state.current)}
-          </div>
       </div>
+
     );
   }
 }
 
-Sider.PropTypes={
-  main:PropTypes.object,
-  dispatch:PropTypes.func
+Sider.PropTypes = {
+  main: PropTypes.object,
+  dispatch: PropTypes.func
 }
 
 

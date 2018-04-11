@@ -176,6 +176,24 @@
   margin-top: 10px;
   line-height: 16px;
 }
+/* 走马灯 */
+Carousel{
+  width: 100%;
+  height: 200px;
+}
+.ant-carousel .slick-slide {
+  height: 200px;
+  line-height: 200px;
+  overflow: hidden;
+}
+.Carousel{
+  width:100%;
+  height: 100%;
+  background: #000;
+  text-align: center;
+
+}
+
 @media screen and (max-width: 414px) {
   .pic-details-demo{
     transform: scale(.65) translateX(12px);
