@@ -14,7 +14,9 @@ export default {
   {
     loginLoading:false,
     myState:0,
-    data:{}
+    data:{},
+    responseMsg:{},
+    isToast:false
   },
   subscriptions: {
     setup ({ dispatch,history }) {
@@ -29,7 +31,7 @@ export default {
     *login ({payload}, { call, put}) {
       yield put({ type: 'showLoginLoading' })
       yield call(delay,2000)
-      yield put({ type: 'hideLoginLoading' })
+      // yield put({ type: 'hideLoginLoading' })
       yield call(delay,1000)
       function encrypt(word) {  
         var key = CryptoJS.enc.Utf8.parse("1234567890000000"); //16位  
@@ -62,9 +64,10 @@ export default {
           return;
       }else{
         if(backdata.code===20000){
+          yield put({type:'loginMsg',data:{code:0,message:'登陆成功，请稍后'}})
           yield put(routerRedux.push({pathname:'/main'}))
         }else{
-          console.log(backdata.msg);
+          yield put({type:'loginMsg',data:{code:1,message:'账号或密码错误，清重新尝试'}})
         }
       }
       yield put({type:'changeMsg',msg:backdata})
@@ -95,6 +98,12 @@ export default {
       console.log(action,'msg');
       return {
         ...state,data:action.msg
+      }
+    },
+    loginMsg(state,action){
+      console.log(action.data,'登陆');
+      return {
+        ...state,isToast:true,responseMsg:action.data
       }
     }
   },

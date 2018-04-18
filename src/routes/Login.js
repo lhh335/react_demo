@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Button, Row, Form, Input } from 'antd';
 import {request} from '../utils/request';
-
+import { Toast, WhiteSpace, WingBlank } from 'antd-mobile';
 const FormItem = Form.Item
 
 const Login = ({
@@ -15,19 +15,28 @@ const Login = ({
   }
 }) => {
   const {loginLoading} = app;
-
   var uri = 'https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png'
-
   function handleOk () {
     validateFieldsAndScroll((err,value)=>{
-      console.log(err,23232,value);
       if (err) {
         return
       }
       dispatch({type:'app/login',payload:value})
     })
   }
-
+  function showToast(data){
+    console.log(data,'data=====---->>>');
+    switch(data.code){
+      case 0:
+        Toast.success(data.message, 1);
+        break;
+      case 1:
+        Toast.fail(data.message, 1);
+        break;
+      default:
+        break;
+    }
+  }
   return (
     <div style={styles.login}>
       <div style={styles.loginView}>
@@ -63,7 +72,7 @@ const Login = ({
 
           </form>
         </div>
-
+        {app.isToast?showToast(app.responseMsg):''}
       </div>
     </div>
   )
