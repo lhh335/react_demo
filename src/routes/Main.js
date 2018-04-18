@@ -57,8 +57,7 @@ class Sider extends React.Component {
     const root = $('#root');
     console.log(root.get(0).offsetHeight);
     data_reactroot.style.height = root.get(0).offsetHeight + 'px';
-    console.log(SHA256('lihaihe').toString(cryptojs.enc.Hex),'加密成字符串');
-    console.log(SHA256('lihaihe'),'普通加密');
+    
   }
   render() {
     const { main, dispatch } = this.props;
