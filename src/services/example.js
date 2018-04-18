@@ -1,19 +1,20 @@
-import {request} from '../utils/request';
+import {requestPost} from '../utils/request';
 import {delay} from '../utils/request';
+import * as Server from './serverName';
 
 
-export async function login(data) {
-  console.log(data,44444);
-  return request('http://localhost:9000/server',{
-    method:'POST',
-    headers:{
-        'Access-Control-Allow-Origin': 'http://localhost:9000',
-        'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-    },
-    mode:"cors",
-    body:JSON.stringify(data.payload)
+export async function login({payload}) {
+  console.log(payload,'====================>>>>>>>>>');
+  return requestPost(Server.userLogin,{
+    body:JSON.stringify(payload)
   });
+}
+
+export async function logout({payload}){
+  console.log(payload,'===================');
+  return requestPost(Server.logout,{
+    body:JSON.stringify(payload)
+  })
 }
 
 // export function login(payload){

@@ -4,7 +4,6 @@ import { stat } from 'fs';
 import {request} from '../utils/request';
 
 const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
-console.log(login,'login');
 export default {
   namespace: 'app',
   state:
@@ -30,12 +29,17 @@ export default {
       yield put({ type: 'hideLoginLoading' })
       yield call(delay,1000)
       const backdata=yield call(login,{payload});
-      console.log(backdata,'backdata');
+      console.log(backdata,'backdata','=====payload',payload);
       if(backdata.err!==undefined){
           return;
+      }else{
+        if(backdata.code===20000){
+          yield put(routerRedux.push({pathname:'/main'}))
+        }else{
+          console.log(backdata.msg);
+        }
       }
       yield put({type:'changeMsg',msg:backdata})
-      yield put(routerRedux.push('/main'))
     },
     *practice(value,{call,put}){
       yield put({type:'changeState',value:55})

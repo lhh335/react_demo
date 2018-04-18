@@ -1,7 +1,19 @@
 import fetch from 'dva/fetch';
 
+function setParams(data){
+    var params= {method:'POST'};
+    var headers= {
+      'Access-Control-Allow-Origin': 'http://localhost:9000',
+      'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
+      'Content-Type': 'application/json'
+    }
+    
+    params = Object.assign(params,{headers:headers});
+    params = Object.assign(params,data);
+    return params;
+}
+
 function parseJSON(response) {
-  console.log(response,'response');
   return response.json();
 }
 
@@ -19,11 +31,14 @@ function checkStatus(response) {
  * Requests a URL, returning a promise.
  *
  * @param  {string} url       The URL we want to request
- * @param  {object} [options] The options we want to pass to "fetch"
+ * @param  {object} [body] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export function request(url, options) {
-  return fetch(url, options)
+export function requestPost(url, body) {
+  const params = setParams(body);
+  
+  console.log(params,'params ');
+  return fetch(url, params)
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {

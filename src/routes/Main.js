@@ -8,6 +8,9 @@ import Menu2 from './sideMenu/Menu2';
 import Menu3 from './sideMenu/Menu3';
 import Menu4 from './sideMenu/Menu4';
 import { Menu, Icon, Switch, Carousel } from 'antd';
+const AES = require('crypto-js/aes');
+const SHA256 = require('crypto-js/sha256');
+const cryptojs = require('crypto-js');
 const $ = require('jquery');
 const SubMenu = Menu.SubMenu;
 const styles = {
@@ -16,7 +19,8 @@ const styles = {
     background: '#ccc',
     fontSize: 30,
     textAlign: 'center',
-    color: 'blue'
+    color: 'blue',
+    clear:'both'
   }
 }
 class Sider extends React.Component {
@@ -53,7 +57,8 @@ class Sider extends React.Component {
     const root = $('#root');
     console.log(root.get(0).offsetHeight);
     data_reactroot.style.height = root.get(0).offsetHeight + 'px';
-
+    console.log(SHA256('lihaihe').toString(cryptojs.enc.Hex),'加密成字符串');
+    console.log(SHA256('lihaihe'),'普通加密');
   }
   render() {
     const { main, dispatch } = this.props;
@@ -61,7 +66,7 @@ class Sider extends React.Component {
     return (
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
         <div  style={{ flex: '0 0 20%' ,background:'#abc'}}>
-          <Carousel autoplay style={{height:'100%'}}>
+          <Carousel autoplay style={{height:'100%',overflow:'hidden'}}>
             <div style={styles.slider}>1</div>
             <div style={styles.slider}>2</div>
             <div style={styles.slider}>3</div>

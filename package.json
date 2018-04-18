@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "set BROWSER=none&&set HOST=0.0.0.0&&roadhog server",
+    "dev": "roadhog server",
     "lint": "eslint --fix --ext .js src",
     "build": "roadhog build --analyze",
     "server": "node ./src/server.js"
@@ -13,6 +13,7 @@
     "antd": "^2.9.3",
     "babel-plugin-import": "^1.1.1",
     "babel-runtime": "^6.9.2",
+    "crypto-js": "^3.1.9-1",
     "dva": "^1.2.1",
     "express": "^4.16.3",
     "mock": "^0.1.1",
