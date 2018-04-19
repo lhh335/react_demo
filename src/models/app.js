@@ -1,4 +1,4 @@
-import {login} from '../services/example';
+import {login,logout} from '../services/example';
 import { routerRedux } from 'dva/router'
 import { stat } from 'fs';
 import {request} from '../utils/request';
@@ -76,6 +76,16 @@ export default {
       yield call (delay,5000);
       yield put(routerRedux.replace('','/practice'));
     },
+    *logout({payload},{call,put}){
+      console.log(payload,'payload');
+      var responseData = yield call(logout,{payload});
+      if(responseData instanceof Object){
+        if(responseData.code!==undefined&&responseData.code===1000){
+          yield put({type:'logout',payload:responseData})
+          yield put(routerRedux.push(''));
+        }
+      }
+    }
   },
   reducers: {
     showLoginLoading (state) {
@@ -101,6 +111,12 @@ export default {
     loginMsg(state,action){
       return {
         ...state,isToast:true,responseMsg:action.data
+      }
+    },
+    logout(state,action){
+      console.log(action,'action');
+      return {
+        ...state,responseMsg:action.payload
       }
     }
   },

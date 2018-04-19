@@ -15,6 +15,7 @@ const Login = ({
   }
 }) => {
   const {loginLoading,responseMsg} = app;
+  console.log(responseMsg,'responseMsg');
   var uri = 'https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png'
   function handleOk () {
     validateFieldsAndScroll((err,value)=>{
@@ -25,6 +26,11 @@ const Login = ({
     });
     
   }
+  function inputFocus(){
+    
+  }
+
+
   function showToast(data){
     switch(data.code){
       case 0:
@@ -53,7 +59,7 @@ const Login = ({
                     required: true,
                   },
                 ],
-              })(<Input size="large" onPressEnter={handleOk} placeholder="请输入用户名" />)}
+              })(<Input size="large" onPressEnter={handleOk} onFocus={inputFocus} placeholder="请输入用户名" />)}
             </FormItem>
             <FormItem hasFeedback>
               {getFieldDecorator('password', {
@@ -63,9 +69,9 @@ const Login = ({
                     hasFeedback:true,
                   },
                 ],
-              })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="请输入密码" />)}
+              })(<Input size="large" type="password" onPressEnter={handleOk} onFocus={inputFocus} placeholder="请输入密码" />)}
             </FormItem>
-
+            <span style={{color:'red',textAlign:'center',paddingBottom:5}}>{(JSON.stringify(responseMsg)!=='{}'&&responseMsg.code!==undefined&&responseMsg.code===1)?responseMsg.message:'' }</span>
               <Button style={styles.loginButton} type="primary" size="large" onClick={handleOk} loading={loginLoading}>
                 登录
               </Button>
@@ -73,7 +79,7 @@ const Login = ({
           </form>
         </div>
       </div>
-      {JSON.stringify(app.responseMsg)!=='{}'?showToast(app.responseMsg):''}
+      {/* {JSON.stringify(app.responseMsg)!=='{}'?showToast(app.responseMsg):''} */}
     </div>
   )
 }

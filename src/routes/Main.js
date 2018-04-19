@@ -40,7 +40,7 @@ class Sider extends React.Component {
     if(e.key!=='6'){
     this.props.dispatch({ type: 'main/selectedMenu', value: e.key })
     }else{
-    this.props.dispatch({ type: 'main/logout', payload: {key:e.key} })
+    this.props.dispatch({ type: 'app/logout', payload: {key:e.key} })
     }
   }
   matchMenu = (menu) => {
@@ -65,7 +65,7 @@ class Sider extends React.Component {
     const { main, dispatch } = this.props;
     return (
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
-        <div  style={{ flex: '0 0 20%' ,background:'#abc'}}>
+        <div  style={{ flex: '0 0 10%' ,background:'#abc'}}>
           <Carousel autoplay style={{height:'100%',overflow:'hidden'}}>
             <div style={styles.slider}>1</div>
             <div style={styles.slider}>2</div>
@@ -73,7 +73,7 @@ class Sider extends React.Component {
             <div style={styles.slider}>4</div>
           </Carousel>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', flex: "0 4 80%" }}>
+        <div style={{ display: 'flex', flexDirection: 'row', flex: "0 4 90%" }}>
           <div style={{ flex: '0 1 10%', background: this.state.theme == 'dark' ? 'rgb(64,64,64)' : 'white', flexDirection: 'column', display: 'inline-flex' }}>
             <Menu
               theme={this.state.theme}
@@ -112,9 +112,10 @@ class Sider extends React.Component {
 }
 
 Sider.PropTypes = {
+  app:PropTypes.object,
   main: PropTypes.object,
   dispatch: PropTypes.func
 }
 
 
-export default connect(({ main }) => ({ main }))(Sider)
+export default connect(({ main,app }) => ({ main,app }))(Sider)

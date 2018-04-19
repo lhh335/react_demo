@@ -16,15 +16,8 @@ export default {
   effects: {
     *selectedMenu({value},{call,put}){
       yield put({type:'changeMenu',value:value});
-    },
-    *logout({payload},{call,put}){
-      var responseData = yield call(logout,{payload});
-      if(responseData instanceof Object){
-        if(responseData.code!==undefined&&responseData.code===1000){
-          yield put(routerRedux.push(''));
-        }
-      }
     }
+    
     },
   reducers: {
     changeMenu(state,action){
