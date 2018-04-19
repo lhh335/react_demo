@@ -8,7 +8,6 @@ const MenuItemGroup = Menu.ItemGroup;
 
 const SideMenu = ({app,dispatch})=>{
     function handleClick(e){
-        console.log('click ', e);
         dispatch({type:'app/sideMenu',value:e.key})
       }
     return (

@@ -36,7 +36,6 @@ function checkStatus(response) {
  */
 export function requestPost(url, body) {
   const params = setParams(body);
-  console.log(params,'params ');
   return fetch(url, params)
     .then(checkStatus)
     .then(parseJSON)

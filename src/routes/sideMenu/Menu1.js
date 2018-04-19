@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'dva';
 
 const Menu1 = ({app,main,dispatch})=>{
-    console.log(app,main,'app/main');
-   
     return(
         <div>
             <h1 style={{textAlign:'center'}}>页面一</h1>

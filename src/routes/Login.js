@@ -26,7 +26,6 @@ const Login = ({
     
   }
   function showToast(data){
-    console.log(data,'data=====---->>>');
     switch(data.code){
       case 0:
         Toast.success(data.message, 1);

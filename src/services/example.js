@@ -10,7 +10,6 @@ export async function login({payload}) {
 }
 
 export async function logout({payload}){
-  console.log(payload,'登出===================11111');
   return requestPost(Server.userLogout,{
     body:JSON.stringify(payload)
   })

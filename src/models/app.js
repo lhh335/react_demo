@@ -59,7 +59,6 @@ export default {
         payload.password = encrypt(payload.password);
       }
       const backdata=yield call(login,{payload});
-      console.log(backdata,'backdata','=====payload',payload);
       if(backdata.err!==undefined){
           return;
       }else{
@@ -95,13 +94,11 @@ export default {
       }
     },
     changeMsg(state,action){
-      console.log(action,'msg');
       return {
         ...state,data:action.msg
       }
     },
     loginMsg(state,action){
-      console.log(action.data,'登陆');
       return {
         ...state,isToast:true,responseMsg:action.data
       }

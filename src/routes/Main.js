@@ -37,7 +37,6 @@ class Sider extends React.Component {
     this.setState({
       current: e.key,
     });
-    console.log(e.key);
     if(e.key!=='6'){
     this.props.dispatch({ type: 'main/selectedMenu', value: e.key })
     }else{
@@ -45,7 +44,6 @@ class Sider extends React.Component {
     }
   }
   matchMenu = (menu) => {
-    console.log(menu, '切换menu');
     switch (Number(menu)) {
       case 1:
         return <Menu1 />
@@ -60,13 +58,11 @@ class Sider extends React.Component {
   componentDidMount() {
     const data_reactroot = $('[data-reactroot]')[0];
     const root = $('#root');
-    console.log(root.get(0).offsetHeight);
     data_reactroot.style.height = root.get(0).offsetHeight + 'px';
     
   }
   render() {
     const { main, dispatch } = this.props;
-    console.log(main, 'main');
     return (
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
         <div  style={{ flex: '0 0 20%' ,background:'#abc'}}>

@@ -5,7 +5,6 @@ import {request} from '../utils/request';
 
 
 const Practice = ({app,dispatch})=>{
-    console.log(app,'渲染时的app');
     function changeState(){
         dispatch({type:'app/practice'});
         // request('https://localhost:8005',{method:'GET',origin:'https://localhost:8005',mode:'cors',credentials:'include'});
