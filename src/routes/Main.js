@@ -37,7 +37,12 @@ class Sider extends React.Component {
     this.setState({
       current: e.key,
     });
+    console.log(e.key);
+    if(e.key!=='6'){
     this.props.dispatch({ type: 'main/selectedMenu', value: e.key })
+    }else{
+    this.props.dispatch({ type: 'main/logout', payload: {key:e.key} })
+    }
   }
   matchMenu = (menu) => {
     console.log(menu, '切换menu');
@@ -83,14 +88,15 @@ class Sider extends React.Component {
               mode="inline"
             >
               <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-                <Menu.Item key="1">Option 1</Menu.Item>
-                <Menu.Item key="2">Option 2</Menu.Item>
-                <Menu.Item key="3">Option 3</Menu.Item>
-                <Menu.Item key="4">Option 4</Menu.Item>
+                <Menu.Item key="1">选项一</Menu.Item>
+                <Menu.Item key="2">选项二</Menu.Item>
+                <Menu.Item key="3">选项三</Menu.Item>
+                <Menu.Item key="4">选项四</Menu.Item>
                 <Menu.Item key="5">
-                  <Link to={'/path'}> {'asdas'}</Link>
+                  <Link to={'/path'}> {'链接'}</Link>
                 </Menu.Item>
               </SubMenu>
+              <Menu.Item key="6">退出</Menu.Item>
             </Menu>
             <div style={{ display: 'flex', flex: 1, alignItems: 'flex-end', justifyContent: 'flex-end' }}>
               <Switch

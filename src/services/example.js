@@ -4,15 +4,14 @@ import * as Server from './serverName';
 
 
 export async function login({payload}) {
-  console.log(payload,'====================>>>>>>>>>');
   return requestPost(Server.userLogin,{
     body:JSON.stringify(payload)
   });
 }
 
 export async function logout({payload}){
-  console.log(payload,'===================');
-  return requestPost(Server.logout,{
+  console.log(payload,'登出===================11111');
+  return requestPost(Server.userLogout,{
     body:JSON.stringify(payload)
   })
 }

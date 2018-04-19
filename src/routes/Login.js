@@ -14,7 +14,7 @@ const Login = ({
     validateFieldsAndScroll,
   }
 }) => {
-  const {loginLoading} = app;
+  const {loginLoading,responseMsg} = app;
   var uri = 'https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png'
   function handleOk () {
     validateFieldsAndScroll((err,value)=>{
@@ -22,7 +22,8 @@ const Login = ({
         return
       }
       dispatch({type:'app/login',payload:value})
-    })
+    });
+    
   }
   function showToast(data){
     console.log(data,'data=====---->>>');
@@ -72,8 +73,8 @@ const Login = ({
 
           </form>
         </div>
-        {app.isToast?showToast(app.responseMsg):''}
       </div>
+      {JSON.stringify(app.responseMsg)!=='{}'?showToast(app.responseMsg):''}
     </div>
   )
 }

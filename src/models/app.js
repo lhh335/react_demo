@@ -31,7 +31,7 @@ export default {
     *login ({payload}, { call, put}) {
       yield put({ type: 'showLoginLoading' })
       yield call(delay,2000)
-      // yield put({ type: 'hideLoginLoading' })
+      yield put({ type: 'hideLoginLoading' })
       yield call(delay,1000)
       function encrypt(word) {  
         var key = CryptoJS.enc.Utf8.parse("1234567890000000"); //16位  
@@ -43,7 +43,7 @@ export default {
                 iv: iv,  
                 mode: CryptoJS.mode.CBC,  
                 padding: CryptoJS.pad.Pkcs7  
-            });  
+            });
         } else if (typeof(word) == 'object') { //对象格式的转成json字符串  
             data = JSON.stringify(word);  
             var srcs = CryptoJS.enc.Utf8.parse(data);  
