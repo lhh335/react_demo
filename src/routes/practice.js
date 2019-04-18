@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect}  from 'dva';
-import {request} from '../utils/request';
 
 
 

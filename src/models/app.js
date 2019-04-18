@@ -1,123 +1,109 @@
-import {login,logout} from '../services/example';
-import { routerRedux } from 'dva/router'
-import { stat } from 'fs';
-import {request} from '../utils/request';
-const AES = require('crypto-js/aes');
-const SHA256 = require('crypto-js/sha256');
-const CryptoJS = require('crypto-js');
+import { login, logout } from "../services/index";
+import { routerRedux } from "dva/router";
+import { encrypt, delay } from '../utils/index';
 
 
-const delay = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 export default {
-  namespace: 'app',
-  state:
-  {
-    loginLoading:false,
-    myState:0,
-    data:{},
-    responseMsg:{},
-    isToast:false
+  namespace: "app",
+  state: {
+    loginLoading: false,
+    myState: 0,
+    data: {},
+    responseMsg: {},
+    isToast: false
   },
   subscriptions: {
-    setup ({ dispatch,history }) {
-      history.listen((location)=>{
-        if(location.pathname==='/practice'){
-          dispatch({type:'addDoubleState'})
+    setup({ dispatch, history }) {
+      history.listen(location => {
+        if (location.pathname === "/practice") {
+          dispatch({ type: "addDoubleState" });
         }
-      })
-    },
+      });
+    }
   },
   effects: {
-    *login ({payload}, { call, put}) {
-      yield put({ type: 'showLoginLoading' })
-      yield call(delay,2000)
-      yield put({ type: 'hideLoginLoading' })
-      yield call(delay,1000)
-      function encrypt(word) {  
-        var key = CryptoJS.enc.Utf8.parse("1234567890000000"); //16位  
-        var iv = CryptoJS.enc.Utf8.parse("1234567890000000");  
-        var encrypted = '';  
-        if (typeof(word) == 'string') {  
-            var srcs = CryptoJS.enc.Utf8.parse(word);  
-            encrypted = CryptoJS.AES.encrypt(srcs, key, {  
-                iv: iv,  
-                mode: CryptoJS.mode.CBC,  
-                padding: CryptoJS.pad.Pkcs7  
-            });
-        } else if (typeof(word) == 'object') { //对象格式的转成json字符串  
-            data = JSON.stringify(word);  
-            var srcs = CryptoJS.enc.Utf8.parse(data);  
-            encrypted = CryptoJS.AES.encrypt(srcs, key, {  
-                iv: iv,  
-                mode: CryptoJS.mode.CBC,  
-                padding: CryptoJS.pad.Pkcs7  
-            })  
-        }  
-        return encrypted.ciphertext.toString();  
-    }  
-      if(payload.password!==undefined && typeof payload.password ==='string'){
+    *login({ payload }, { call, put }) {
+      yield put({ type: "showLoginLoading" });
+      yield call(delay, 2000);
+      yield put({ type: "hideLoginLoading" });
+      yield call(delay, 1000);
+      const { password } = payload;
+      if (typeof password === 'string') {
         payload.password = encrypt(payload.password);
       }
-      const backdata=yield call(login,{payload});
-      if(backdata.err!==undefined){
-          return;
-      }else{
-        if(backdata.code===20000){
-          yield put({type:'loginMsg',data:{code:0,message:'登陆成功，请稍后'}})
-          yield put(routerRedux.push({pathname:'/main'}))
-        }else{
-          yield put({type:'loginMsg',data:{code:1,message:'账号或密码错误，清重新尝试'}})
+      const backdata = yield call(login, { payload });
+      if (backdata.err !== undefined) {
+        return;
+      } else {
+        if (backdata.code === 20000) {
+          yield put({
+            type: "loginMsg",
+            data: { code: 0, message: "登陆成功，请稍后" }
+          });
+          yield put(routerRedux.push({ pathname: "/main" }));
+        } else {
+          yield put({
+            type: "loginMsg",
+            data: { code: 1, message: "账号或密码错误，请重新尝试" }
+          });
         }
       }
-      yield put({type:'changeMsg',msg:backdata})
+      yield put({ type: "changeMsg", msg: backdata });
     },
-    *practice(value,{call,put}){
-      yield put({type:'changeState',value:55})
-      yield call (delay,5000);
-      yield put(routerRedux.replace('','/practice'));
+    *practice(value, { call, put }) {
+      yield put({ type: "changeState", value: 55 });
+      yield call(delay, 5000);
+      yield put(routerRedux.replace("", "/practice"));
     },
-    *logout({payload},{call,put}){
-      console.log(payload,'payload');
-      var responseData = yield call(logout,{payload});
-      if(responseData instanceof Object){
-        if(responseData.code!==undefined&&responseData.code===1000){
-          yield put({type:'logout',payload:responseData})
-          yield put(routerRedux.push(''));
+    *logout({ payload }, { call, put }) {
+      console.log(payload, "payload");
+      var responseData = yield call(logout, { payload });
+      if (responseData instanceof Object) {
+        if (responseData.code !== undefined && responseData.code === 1000) {
+          yield put({ type: "logout", payload: responseData });
+          yield put(routerRedux.push(""));
         }
       }
     }
   },
   reducers: {
-    showLoginLoading (state) {
+    showLoginLoading(state) {
       return {
-        ...state,loginLoading: true,
-      }
+        ...state,
+        loginLoading: true
+      };
     },
-    hideLoginLoading (state) {
+    hideLoginLoading(state) {
       return {
-        ...state,loginLoading: false,
-      }
+        ...state,
+        loginLoading: false
+      };
     },
-    changeState(state,action){
+    changeState(state, action) {
       return {
-        ...state,myState:state.myState+action.value
-      }
+        ...state,
+        myState: state.myState + action.value
+      };
     },
-    changeMsg(state,action){
+    changeMsg(state, action) {
       return {
-        ...state,data:action.msg
-      }
+        ...state,
+        data: action.msg
+      };
     },
-    loginMsg(state,action){
+    loginMsg(state, action) {
       return {
-        ...state,isToast:true,responseMsg:action.data
-      }
+        ...state,
+        isToast: true,
+        responseMsg: action.data
+      };
     },
-    logout(state,action){
-      console.log(action,'action');
+    logout(state, action) {
+      console.log(action, "action");
       return {
-        ...state,responseMsg:action.payload
-      }
+        ...state,
+        responseMsg: action.payload
+      };
     }
-  },
-}
+  }
+};

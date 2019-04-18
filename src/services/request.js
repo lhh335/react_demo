@@ -1,16 +1,16 @@
-import fetch from 'dva/fetch';
+import fetch from "dva/fetch";
 
-function setParams(data){
-    var params= {method:'POST'};
-    var headers= {
-      'Access-Control-Allow-Origin': 'http://localhost:9000',
-      'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
-      'Content-Type': 'application/json'
-    }
-    
-    params = Object.assign(params,{headers:headers});
-    params = Object.assign(params,data);
-    return params;
+function setParams(data) {
+  var params = { method: "POST" };
+  var headers = {
+    "Access-Control-Allow-Origin": "http://localhost:9000",
+    "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
+    "Content-Type": "application/json"
+  };
+
+  params = Object.assign(params, { headers: headers });
+  params = Object.assign(params, data);
+  return params;
 }
 
 function parseJSON(response) {
@@ -40,9 +40,7 @@ export function requestPost(url, body) {
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
-       return data;
-     })
+      return data;
+    })
     .catch(err => ({ err }));
 }
-
-export const delay = time => new Promise(resolve => setTimeout(resolve, time))
