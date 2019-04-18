@@ -1,7 +1,7 @@
 import { requestPost } from "./request";
 import * as apiName from "./apiName";
 
-export const login = async ({ payload }) => {
+export const login = async (payload) => {
   return requestPost(apiName.userLogin, {
     body: JSON.stringify(payload)
   });

@@ -1,24 +1,20 @@
-import React from 'react';
-import { Router, Route } from 'dva/router';
-import Login from './routes/Login';
-import Main from './routes/Main';
-import Path from './routes/path';
-import Practice from './routes/practice';
-
+import React from "react";
+import { Router, Route } from "dva/router";
+import Login from "./routes/Login";
+import Main from "./routes/Main";
+import Path from "./routes/path";
+import Practice from "./routes/practice";
 
 function RouterConfig({ history }) {
   return (
     <div>
       <Router history={history}>
-      <Route path="/" component={Login} />
-      <Route path="/main" component={Main} />
-      
-      
-      <Route path="/path" component={Path} />
-      <Route path="/practice" component={Practice} />
-    </Router>
+        <Route path="/" component={Login} />
+        <Route path="/main" component={Main} />
+        <Route path="/path" component={Path} />
+        <Route path="/practice" component={Practice} />
+      </Router>
     </div>
-    
   );
 }
 

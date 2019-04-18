@@ -8,9 +8,6 @@ import Menu2 from './sideMenu/Menu2';
 import Menu3 from './sideMenu/Menu3';
 import Menu4 from './sideMenu/Menu4';
 import { Menu, Icon, Switch, Carousel } from 'antd';
-const AES = require('crypto-js/aes');
-const SHA256 = require('crypto-js/sha256');
-const cryptojs = require('crypto-js');
 const $ = require('jquery');
 const SubMenu = Menu.SubMenu;
 const styles = {

@@ -31,7 +31,7 @@ export default {
       if (typeof password === 'string') {
         payload.password = encrypt(payload.password);
       }
-      const backdata = yield call(login, { payload });
+      const backdata = yield call(login, payload);
       if (backdata.err !== undefined) {
         return;
       } else {

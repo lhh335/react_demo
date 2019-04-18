@@ -1,37 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'dva'
-import { Button, Row, Form, Input } from 'antd';
-import { Toast, WhiteSpace, WingBlank } from 'antd-mobile';
-const FormItem = Form.Item
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "dva";
+import { Button, Row, Form, Input } from "antd";
+import { Toast, WhiteSpace, WingBlank } from "antd-mobile";
+const FormItem = Form.Item;
 
 const Login = ({
   app,
   dispatch,
-  form:{
-    getFieldDecorator,
-    validateFieldsAndScroll,
-  }
+  form: { getFieldDecorator, validateFieldsAndScroll }
 }) => {
-  const {loginLoading,responseMsg} = app;
-  console.log(responseMsg,'responseMsg');
-  var uri = 'https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png'
-  function handleOk () {
-    validateFieldsAndScroll((err,value)=>{
+  const { loginLoading, responseMsg } = app;
+  console.log(responseMsg, "responseMsg");
+  var uri = "https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png";
+  function handleOk() {
+    validateFieldsAndScroll((err, value) => {
       if (err) {
-        return
+        return;
       }
-      dispatch({type:'app/login',payload:value})
+      dispatch({ type: "app/login", payload: value });
     });
-    
   }
-  function inputFocus(){
-    
-  }
+  function inputFocus() {}
 
-
-  function showToast(data){
-    switch(data.code){
+  function showToast(data) {
+    switch (data.code) {
       case 0:
         Toast.success(data.message, 1);
         break;
@@ -46,84 +39,112 @@ const Login = ({
     <div style={styles.login}>
       <div style={styles.loginView}>
         <div style={styles.loginHead}>
-          <img style={styles.loginImg} src={uri}></img>
-          <span style={styles.loginText}>Dva Login Test</span>
+          <img style={styles.loginImg} src={uri} />
+          <span style={styles.loginText}>欢迎来到前端技术社区</span>
         </div>
         <div style={styles.loginBody}>
-          <form style={{width:'80%',}}>
+          <form style={{ width: "80%" }}>
             <FormItem hasFeedback>
-              {getFieldDecorator('username', {
+              {getFieldDecorator("username", {
+                rules: [
+                  {
+                    required: true
+                  }
+                ]
+              })(
+                <Input
+                  size="large"
+                  onPressEnter={handleOk}
+                  onFocus={inputFocus}
+                  placeholder="请输入用户名"
+                />
+              )}
+            </FormItem>
+            <FormItem hasFeedback>
+              {getFieldDecorator("password", {
                 rules: [
                   {
                     required: true,
-                  },
-                ],
-              })(<Input size="large" onPressEnter={handleOk} onFocus={inputFocus} placeholder="请输入用户名" />)}
+                    hasFeedback: true
+                  }
+                ]
+              })(
+                <Input
+                  size="large"
+                  type="password"
+                  onPressEnter={handleOk}
+                  onFocus={inputFocus}
+                  placeholder="请输入密码"
+                />
+              )}
             </FormItem>
-            <FormItem hasFeedback>
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    hasFeedback:true,
-                  },
-                ],
-              })(<Input size="large" type="password" onPressEnter={handleOk} onFocus={inputFocus} placeholder="请输入密码" />)}
-            </FormItem>
-            <span style={{color:'red',textAlign:'center',paddingBottom:5}}>{(JSON.stringify(responseMsg)!=='{}'&&responseMsg.code!==undefined&&responseMsg.code===1)?responseMsg.message:'' }</span>
-              <Button style={styles.loginButton} type="primary" size="large" onClick={handleOk} loading={loginLoading}>
-                登录
-              </Button>
-
+            <span
+              style={{ color: "red", textAlign: "center", paddingBottom: 5 }}
+            >
+              {JSON.stringify(responseMsg) !== "{}" &&
+              responseMsg.code !== undefined &&
+              responseMsg.code === 1
+                ? responseMsg.message
+                : ""}
+            </span>
+            <Button
+              style={styles.loginButton}
+              type="primary"
+              size="large"
+              onClick={handleOk}
+              loading={loginLoading}
+            >
+              登录
+            </Button>
           </form>
         </div>
       </div>
-      {/* {JSON.stringify(app.responseMsg)!=='{}'?showToast(app.responseMsg):''} */}
     </div>
-  )
-}
+  );
+};
 
 Login.propTypes = {
   form: PropTypes.object,
   app: PropTypes.object,
-  dispatch: PropTypes.func,
-}
+  dispatch: PropTypes.func
+};
 
 const styles = {
-  login:{
-    display:'flex',
-    width:'100%',
-    height:'100%',
-    justifyContent:'center',
-    alignItems:'center',
+  login: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  loginView:{
-    width:320,height:320,
-    boxShadow:'0 0 100px rgba(0,0,0,.08)',
+  loginView: {
+    width: 320,
+    height: 320,
+    boxShadow: "0 0 100px rgba(0,0,0,.08)"
   },
-  loginHead:{
-    width:320,
-    height:'20%',
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'flex-end',
+  loginHead: {
+    width: 320,
+    height: "20%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end"
   },
-  loginImg:{
-    width:40,
-    marginRight:8,
+  loginImg: {
+    width: 40,
+    marginRight: 8
   },
-  loginText:{
-    fontSize:18
+  loginText: {
+    fontSize: 18
   },
-  loginBody:{
-    height:'80%',
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
+  loginBody: {
+    height: "80%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  loginButton:{
-    width:'100%'
+  loginButton: {
+    width: "100%"
   }
-}
+};
 
-export default connect(({ app }) => ({ app }))(Form.create()(Login))
+export default connect(({ app }) => ({ app }))(Form.create()(Login));
