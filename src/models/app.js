@@ -1,4 +1,4 @@
-import { login, logout } from "../services/index";
+import { login, logout, init } from "../services/index";
 import { routerRedux } from "dva/router";
 import { encrypt, delay } from '../utils/index';
 
@@ -10,18 +10,36 @@ export default {
     myState: 0,
     data: {},
     responseMsg: {},
-    isToast: false
+    isToast: false,
+    sideMenus: [], // 所有的菜单列表
+    defaultOpenKeys: [], // 默认打开的菜单列表
+    seletedMenukey: 'menu1_0',
+    isLogin: false
   },
   subscriptions: {
     setup({ dispatch, history }) {
+      dispatch({ type: 'init' })
       history.listen(location => {
-        if (location.pathname === "/practice") {
-          dispatch({ type: "addDoubleState" });
+        console.log(location, '历史');
+        const isLogin = sessionStorage.getItem('isLogin');
+        if (!isLogin && location.pathname === "/main") {
+          dispatch(routerRedux.replace({ pathname: "/" }));
+          return;
+        }
+        if (!!isLogin && location.pathname === "/") {
+          dispatch(routerRedux.replace({ pathname: "/main" }));
         }
       });
     }
   },
   effects: {
+    *init({ payload }, { call, put }) {
+      const { code, data = {} } = yield call(init, {});
+      if (code === 200) {
+        const sideMenus = data.sideMenus || sessionStorage.getItem('sideMenus') || {};
+        sessionStorage.setItem('sideMenus', JSON.stringify(sideMenus));
+      }
+    },
     *login({ payload }, { call, put }) {
       yield put({ type: "showLoginLoading" });
       yield call(delay, 2000);
@@ -35,11 +53,16 @@ export default {
       if (backdata.err !== undefined) {
         return;
       } else {
-        if (backdata.code === 20000) {
+        if (backdata.code === 200) {
           yield put({
             type: "loginMsg",
             data: { code: 0, message: "登陆成功，请稍后" }
           });
+          yield put({
+            type: 'loginStatus',
+            payload: true
+          })
+          sessionStorage.setItem('isLogin', true);
           yield put(routerRedux.push({ pathname: "/main" }));
         } else {
           yield put({
@@ -56,17 +79,44 @@ export default {
       yield put(routerRedux.replace("", "/practice"));
     },
     *logout({ payload }, { call, put }) {
-      console.log(payload, "payload");
       var responseData = yield call(logout, { payload });
       if (responseData instanceof Object) {
         if (responseData.code !== undefined && responseData.code === 1000) {
+          sessionStorage.removeItem('isLogin');
           yield put({ type: "logout", payload: responseData });
           yield put(routerRedux.push(""));
+          yield put({ 
+            type: 'loginStatus',
+            payload: false
+           });
         }
       }
     }
   },
   reducers: {
+    loginStatus(state, { payload }) {
+      return {
+        ...state,
+        isLogin: payload
+      }
+    },
+    saveSideMenus(state,{ payload }){
+      // 一级菜单
+      const firstMenus = payload.map(item => {
+        return item.key;
+      })
+      return {
+        ...state,
+        sideMenus: payload,
+        defaultOpenKeys: firstMenus
+      }
+    },
+    saveSelectedMenuKey(state, { payload }){
+      return {
+        ...state,
+        seletedMenukey: payload
+      }
+    },
     showLoginLoading(state) {
       return {
         ...state,
@@ -99,7 +149,6 @@ export default {
       };
     },
     logout(state, action) {
-      console.log(action, "action");
       return {
         ...state,
         responseMsg: action.payload

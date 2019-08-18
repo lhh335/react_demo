@@ -1,4 +1,4 @@
-import { requestPost } from "./request";
+import { requestPost, requestGet } from "./request";
 import * as apiName from "./apiName";
 
 export const login = async (payload) => {
@@ -11,5 +11,9 @@ export const logout = async ({ payload }) => {
   return requestPost(apiName.userLogout, {
     body: JSON.stringify(payload)
   });
+};
+
+export const init = async ({ payload }) => {
+  return requestGet(apiName.init);
 };
 

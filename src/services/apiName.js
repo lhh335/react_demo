@@ -1,5 +1,6 @@
 const apiName = {
-  userLogin: "http://localhost:9000/server",
-  userLogout: "http://localhost:9000/serverOut"
+  userLogin: "http://127.0.0.1:9000/login",
+  userLogout: "http://127.0.0.1:9000/logout",
+  init: "http://127.0.0.1:9000/init"
 };
 export default apiName;

@@ -44,3 +44,21 @@ export function requestPost(url, body) {
     })
     .catch(err => ({ err }));
 }
+
+/**
+ * Requests a URL, returning a promise.
+ *
+ * @param  {string} url       The URL we want to request
+ * @param  {object} [body] The options we want to pass to "fetch"
+ * @return {object}           An object containing either "data" or "err"
+ */
+export function requestGet(url, body) {
+  // const params = setParams(body);
+  return fetch(url)
+    .then(checkStatus)
+    .then(parseJSON)
+    .then(data => {
+      return data;
+    })
+    .catch(err => ({ err }));
+}
