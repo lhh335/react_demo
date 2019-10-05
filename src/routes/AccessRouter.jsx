@@ -1,20 +1,17 @@
-import Menu1 from "../pages/menus/Menu1";
-import Menu2 from "../pages/menus/Menu2";
-import Menu3 from "../pages/menus/Menu3";
-import Menu4 from "../pages/menus/Menu4";
+import moduleRouter from './moduleRouter.json';
+import { InstRouter } from './InstRouter';
+import { SysRouter } from './SysRouter';
 
 
-export const  AccessRouter = (key) => {
-  switch(key) {
-    case 'menu1_0':
-      return <Menu1 />;
-    case 'menu1_1':
-      return <Menu2 />;
-    case 'menu1_2':
-      return <Menu3 />;
-    case 'menu1_3':
-      return <Menu4 />;
-    default:
-      return <Menu1 />;
+export const AccessRouter = (module_key) => {
+
+  const pathRouter = module_key.split('_')[0];
+  
+  switch(moduleRouter[pathRouter]) {
+    case 'inst': 
+      return InstRouter(module_key);
+    case 'system': 
+      return SysRouter(module_key);
+    default: return null;
   }
 }

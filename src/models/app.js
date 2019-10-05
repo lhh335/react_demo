@@ -67,7 +67,7 @@ export default {
         } else {
           yield put({
             type: "loginMsg",
-            data: { code: 1, message: "账号或密码错误，请重新尝试" }
+            data: { code: 1, message: backdata.msg }
           });
         }
       }

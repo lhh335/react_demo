@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'dva';
 
-const Menu2 = ({app,dispatch})=>{
+const Approval = ({app,dispatch})=>{
     return(
         <div style={{width:'100%',display:'flex',justifyContent:'space-around'}}>
-            <h1>页面二</h1>
+            <h1>指令审批页面</h1>
         </div>
     )
 }
 
-Menu2.propTypes = {
+Approval.propTypes = {
     main: PropTypes.object,
     dispatch: PropTypes.func,
   }
-export default connect(({main})=>({main}))(Menu2);
+export default connect(({main})=>({main}))(Approval);

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "dva";
 import { AccessRouter } from "./AccessRouter";
-import "./main.css";
+import styles from "./main.css";
 
 import { Menu, Icon, Switch, Carousel } from "antd";
 const $ = require("jquery");
@@ -31,7 +31,6 @@ class Sider extends React.Component {
    */
   handleClick = e => {
     this.props.dispatch({ type: "app/saveSelectedMenuKey", payload: e.key });
-
     if (e.key !== "logout") {
       this.props.dispatch({ type: "main/selectedMenu", value: e.key });
     } else {
@@ -69,80 +68,79 @@ class Sider extends React.Component {
     });
   };
 
+  /**
+   * 顶部导航栏
+   */
   renderNavigation = () => {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          height: 46,
-          alignItems: "center",
-          padding: "0px 20px",
-          boxSizing: "border-box",
-          fontWeight: 'bold',
-          backgroundColor: '#ee85be'
-        }}
-      >
+      <div className={styles.navi_wrapper}>
         <p style={{ fontSize: 16 }}>IMS投资管理系统</p>
         <p>您好，admin</p>
       </div>
     );
   };
 
-  renderContent = () => {
+  /**
+   * 侧边导航
+   */
+  renderSideMenu = () => {
     const { app } = this.props;
     const { sideMenus = [], seletedMenukey, defaultOpenKeys } = app;
     const menus = {
       children: sideMenus || []
     };
     return (
-      <div style={{ display: "flex", width: "100%", flex: 1 }}>
-        <div
-          style={{
-            background: this.state.theme == "dark" ? "rgb(64,64,64)" : "white",
-            flexDirection: "column",
-            display: "inline-flex",
-            width: 180
-          }}
+      <div className={`${styles.side_menu} ${this.state.theme === 'dark' ? styles.side_menu_dark : styles.side_menu_white}`}>
+        <Menu
+          theme={this.state.theme}
+          onClick={this.handleClick}
+          style={{ width: "100%" }}
+          defaultOpenKeys={defaultOpenKeys}
+          selectedKeys={[seletedMenukey]}
+          mode="inline"
         >
-          <Menu
-            theme={this.state.theme}
-            onClick={this.handleClick}
-            style={{ width: "100%" }}
-            defaultOpenKeys={defaultOpenKeys}
-            selectedKeys={[seletedMenukey]}
-            mode="inline"
-          >
-            {this.renderMenus(menus)}
-            <Menu.Item key="logout">退出</Menu.Item>
-          </Menu>
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              alignItems: "flex-end",
-              justifyContent: "flex-end"
-            }}
-          >
-            <Switch
-              checked={this.state.theme === "dark"}
-              onChange={this.changeTheme}
-            />
-          </div>
-        </div>
-        <div style={{ flex: 1, height: "100%" }}>
-          <div style={{ background: "#eee", fontSize: 30 }}>
-            {AccessRouter(seletedMenukey)}
-          </div>
+          {this.renderMenus(menus)}
+          <Menu.Item key="logout">退出</Menu.Item>
+        </Menu>
+        <div className={styles.theme_btn}>
+          <Switch
+            checked={this.state.theme === "dark"}
+            onChange={this.changeTheme}
+          />
         </div>
       </div>
     );
+  }
+
+  /**
+   * 主内容区域
+   */
+  renderContent = () => {
+    const { app } = this.props;
+    const { seletedMenukey } = app;
+    return (
+      <div className={styles.content_wrapper}>
+        <div className={styles.content}>
+          {AccessRouter(seletedMenukey)}
+        </div>
+      </div>
+    );
+  }
+
+  renderContentWrapper = () => {
+    return (
+      <div className={styles.side_wrapper}>
+        {this.renderSideMenu()}
+        {this.renderContent()}
+      </div>
+    );
   };
+
   render() {
     return (
       <div style={{ height: "100%", display: 'flex', flexDirection: 'column' }}>
         {this.renderNavigation()}
-        {this.renderContent()}
+        {this.renderContentWrapper()}
       </div>
     );
   }

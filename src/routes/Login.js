@@ -11,7 +11,6 @@ const Login = ({
   form: { getFieldDecorator, validateFieldsAndScroll }
 }) => {
   const { loginLoading, responseMsg } = app;
-  console.log(responseMsg, "responseMsg");
   var uri = "https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png";
   function handleOk() {
     validateFieldsAndScroll((err, value) => {
@@ -40,7 +39,7 @@ const Login = ({
       <div style={styles.loginView}>
         <div style={styles.loginHead}>
           <img style={styles.loginImg} src={uri} />
-          <span style={styles.loginText}>欢迎来到前端技术社区</span>
+          <span style={styles.loginText}>IMS投资管理系统</span>
         </div>
         <div style={styles.loginBody}>
           <form style={{ width: "80%" }}>
@@ -112,8 +111,7 @@ Login.propTypes = {
 const styles = {
   login: {
     display: "flex",
-    width: "100%",
-    height: "100%",
+    height: '100%',
     justifyContent: "center",
     alignItems: "center"
   },
