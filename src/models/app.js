@@ -9,7 +9,7 @@ export default {
     loginLoading: false,
     myState: 0,
     data: {},
-    responseMsg: {},
+    loginErrorMsg: null,
     isToast: false,
     sideMenus: [], // 所有的菜单列表
     defaultOpenKeys: [], // 默认打开的菜单列表
@@ -34,8 +34,8 @@ export default {
   },
   effects: {
     *init({ payload }, { call, put }) {
-      const { code, data = {} } = yield call(init, {});
-      if (code === 200) {
+      const { status = {}, data = {} } = yield call(init, {});
+      if (status.code === 10000) {
         const sideMenus = data.sideMenus || sessionStorage.getItem('sideMenus') || {};
         sessionStorage.setItem('sideMenus', JSON.stringify(sideMenus));
       }
@@ -49,29 +49,24 @@ export default {
       if (typeof password === 'string') {
         payload.password = encrypt(payload.password);
       }
-      const backdata = yield call(login, payload);
-      if (backdata.err !== undefined) {
-        return;
+      const { status = {}, data = {} } = yield call(login, payload);
+      if (status.code === 10000) {
+        yield put({
+          type: "loginMsg",
+          data: { code: status.code, message: null }
+        });
+        yield put({
+          type: 'loginStatus',
+          payload: true
+        })
+        sessionStorage.setItem('isLogin', true);
+        yield put(routerRedux.push({ pathname: "/main" }));
       } else {
-        if (backdata.code === 200) {
-          yield put({
-            type: "loginMsg",
-            data: { code: 0, message: "登陆成功，请稍后" }
-          });
-          yield put({
-            type: 'loginStatus',
-            payload: true
-          })
-          sessionStorage.setItem('isLogin', true);
-          yield put(routerRedux.push({ pathname: "/main" }));
-        } else {
-          yield put({
-            type: "loginMsg",
-            data: { code: 1, message: backdata.msg }
-          });
-        }
+        yield put({
+          type: "loginMsg",
+          data: { code: status.code, message: status.msg }
+        });
       }
-      yield put({ type: "changeMsg", msg: backdata });
     },
     *practice(value, { call, put }) {
       yield put({ type: "changeState", value: 55 });
@@ -79,17 +74,14 @@ export default {
       yield put(routerRedux.replace("", "/practice"));
     },
     *logout({ payload }, { call, put }) {
-      var responseData = yield call(logout, { payload });
-      if (responseData instanceof Object) {
-        if (responseData.code !== undefined && responseData.code === 1000) {
-          sessionStorage.removeItem('isLogin');
-          yield put({ type: "logout", payload: responseData });
-          yield put(routerRedux.push(""));
-          yield put({ 
-            type: 'loginStatus',
-            payload: false
-           });
-        }
+      var { status, data = {} } = yield call(logout, { payload });
+      if (status.code === 10000) {
+        sessionStorage.removeItem('isLogin');
+        yield put(routerRedux.push(""));
+        yield put({
+          type: 'loginStatus',
+          payload: false
+        });
       }
     }
   },
@@ -100,7 +92,7 @@ export default {
         isLogin: payload
       }
     },
-    saveSideMenus(state,{ payload }){
+    saveSideMenus(state, { payload }) {
       // 一级菜单
       const firstMenus = payload.map(item => {
         return item.key;
@@ -111,7 +103,7 @@ export default {
         defaultOpenKeys: firstMenus
       }
     },
-    saveSelectedMenuKey(state, { payload }){
+    saveSelectedMenuKey(state, { payload }) {
       return {
         ...state,
         seletedMenukey: payload
@@ -141,18 +133,12 @@ export default {
         data: action.msg
       };
     },
-    loginMsg(state, action) {
+    loginMsg(state, payload) {
       return {
         ...state,
         isToast: true,
-        responseMsg: action.data
+        loginErrorMsg: payload.data.message
       };
     },
-    logout(state, action) {
-      return {
-        ...state,
-        responseMsg: action.payload
-      };
-    }
   }
 };

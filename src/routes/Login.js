@@ -10,7 +10,7 @@ const Login = ({
   dispatch,
   form: { getFieldDecorator, validateFieldsAndScroll }
 }) => {
-  const { loginLoading, responseMsg } = app;
+  const { loginLoading, loginErrorMsg } = app;
   var uri = "https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png";
   function handleOk() {
     validateFieldsAndScroll((err, value) => {
@@ -20,7 +20,15 @@ const Login = ({
       dispatch({ type: "app/login", payload: value });
     });
   }
-  function inputFocus() {}
+  function inputFocus() {
+    dispatch({
+      type: 'app/loginMsg',
+      data: {
+        code: null,
+        message: null
+      }
+    })
+  }
 
   function showToast(data) {
     switch (data.code) {
@@ -39,7 +47,7 @@ const Login = ({
       <div style={styles.loginView}>
         <div style={styles.loginHead}>
           <img style={styles.loginImg} src={uri} />
-          <span style={styles.loginText}>IMS投资管理系统</span>
+          <span style={styles.loginText}>美图后台管理系统</span>
         </div>
         <div style={styles.loginBody}>
           <form style={{ width: "80%" }}>
@@ -77,15 +85,13 @@ const Login = ({
                 />
               )}
             </FormItem>
-            <span
-              style={{ color: "red", textAlign: "center", paddingBottom: 5 }}
-            >
-              {JSON.stringify(responseMsg) !== "{}" &&
-              responseMsg.code !== undefined &&
-              responseMsg.code === 1
-                ? responseMsg.message
-                : ""}
-            </span>
+            {!!loginErrorMsg ? (
+              <p
+                style={{ color: "red", textAlign: "left", marginTop: -10 }}
+              >
+                {loginErrorMsg || null}
+              </p>
+            ) : null}
             <Button
               style={styles.loginButton}
               type="primary"
