@@ -1,10 +1,8 @@
 import fetch from "dva/fetch";
 
-function setParams(data) {
-  var params = { method: "POST" };
-  var headers = {
-    "Access-Control-Allow-Origin": "http://localhost:9000",
-    "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
+function setParams(data, method) {
+  let params = { method };
+  let headers = {
     "Content-Type": "application/json"
   };
 
@@ -35,7 +33,43 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export function requestPost(url, body) {
-  const params = setParams(body);
+  const params = setParams(body, 'POST');
+  return fetch(url, params)
+    .then(checkStatus)
+    .then(parseJSON)
+    .then(data => {
+      return data;
+    })
+    .catch(err => ({ err }));
+}
+
+/**
+ * Requests a URL, returning a promise.
+ *
+ * @param  {string} url       The URL we want to request
+ * @param  {object} [body] The options we want to pass to "fetch"
+ * @return {object}           An object containing either "data" or "err"
+ */
+export function requestDelete(url, body) {
+  const params = setParams(body, 'DELETE');
+  return fetch(url, params)
+    .then(checkStatus)
+    .then(parseJSON)
+    .then(data => {
+      return data;
+    })
+    .catch(err => ({ err }));
+}
+
+/**
+ * Requests a URL, returning a promise.
+ *
+ * @param  {string} url       The URL we want to request
+ * @param  {object} [body] The options we want to pass to "fetch"
+ * @return {object}           An object containing either "data" or "err"
+ */
+export function requestPut(url, body) {
+  const params = setParams(body, 'PUT');
   return fetch(url, params)
     .then(checkStatus)
     .then(parseJSON)

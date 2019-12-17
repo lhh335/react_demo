@@ -8,8 +8,11 @@ const FormItem = Form.Item;
 const Login = ({
   app,
   dispatch,
-  form: { getFieldDecorator, validateFieldsAndScroll }
+  form: { getFieldDecorator, validateFieldsAndScroll },
+  location
 }) => {
+  const query = location.query || {};
+  const btn = location.pathname === '/user' ? query.type === 'add' ? '添加' : query.type === 'add' ? '删除' : '修改' : '登录';
   const { loginLoading, loginErrorMsg } = app;
   var uri = "https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png";
   function handleOk() {
@@ -18,6 +21,16 @@ const Login = ({
         return;
       }
       dispatch({ type: "app/login", payload: value });
+    });
+  }
+
+  function handleUser() {
+    const query = location.query || {}
+    validateFieldsAndScroll((err, value) => {
+      if (err) {
+        return;
+      }
+      dispatch({ type: `app/${query.type}user`, payload: value })
     });
   }
   function inputFocus() {
@@ -96,10 +109,10 @@ const Login = ({
               style={styles.loginButton}
               type="primary"
               size="large"
-              onClick={handleOk}
+              onClick={location.pathname === '/user' ? handleUser : handleOk}
               loading={loginLoading}
             >
-              登录
+              {btn}
             </Button>
           </form>
         </div>

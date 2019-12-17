@@ -1,5 +1,6 @@
-import { login, logout, init } from "../services/index";
+import { login, logout, init, adduser, deluser, modifyPwd } from "../services/index";
 import { routerRedux } from "dva/router";
+import { message } from 'antd';
 import { encrypt, delay } from '../utils/index';
 
 
@@ -14,7 +15,8 @@ export default {
     sideMenus: [], // 所有的菜单列表
     defaultOpenKeys: [], // 默认打开的菜单列表
     seletedMenukey: 'menu1_0',
-    isLogin: false
+    isLogin: false,
+    userInfo: {}
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -40,6 +42,52 @@ export default {
         sessionStorage.setItem('sideMenus', JSON.stringify(sideMenus));
       }
     },
+    // 修改密码
+    *modifyuser({ payload }, { call, put }){
+      const { password } = payload;
+      if (typeof password === 'string') {
+        payload.password = encrypt(payload.password);
+      }
+      const { status = {}, data = {} } = yield call(modifyPwd, payload);
+      if (status.code === 10000) {
+
+        message.success('修改密码成功', 2);
+        sessionStorage.removeItem('isLogin');
+        yield call(delay, 3000);
+        yield put(routerRedux.replace({
+          pathname: '/'
+        }))
+      }
+    },
+    *adduser({ payload }, { call, put }) {
+      const { password } = payload;
+      if (typeof password === 'string') {
+        payload.password = encrypt(payload.password);
+      }
+      const { status = {}, data = {} } = yield call(adduser, payload);
+      if (status.code === 10000) {
+        message.success('添加用户成功', 2);
+        yield call(delay, 3000);
+        yield put(routerRedux.replace({
+          pathname: '/main'
+        }))
+      }
+
+    },
+    *deluser({ payload }, { call, put }){
+      const { password } = payload;
+      if (typeof password === 'string') {
+        payload.password = encrypt(payload.password);
+      }
+      const { status = {}, data = {} } = yield call(deluser, payload);
+      if (status.code === 10000) {
+        message.success('删除用户成功', 2);
+        yield call(delay, 3000);
+        yield put(routerRedux.replace({
+          pathname: '/main'
+        }))
+      }
+    },
     *login({ payload }, { call, put }) {
       yield put({ type: "showLoginLoading" });
       yield call(delay, 2000);
@@ -59,6 +107,11 @@ export default {
           type: 'loginStatus',
           payload: true
         })
+        yield put({
+          type: 'saveUserInfo',
+          payload: data
+        })
+        localStorage.setItem("userInfo", JSON.stringify(data));
         sessionStorage.setItem('isLogin', true);
         yield put(routerRedux.push({ pathname: "/main" }));
       } else {
@@ -77,6 +130,11 @@ export default {
       var { status, data = {} } = yield call(logout, { payload });
       if (status.code === 10000) {
         sessionStorage.removeItem('isLogin');
+        yield put({
+          type: 'saveUserInfo',
+          payload: {}
+        })
+        localStorage.removeItem("userInfo");
         yield put(routerRedux.push(""));
         yield put({
           type: 'loginStatus',
@@ -86,6 +144,13 @@ export default {
     }
   },
   reducers: {
+    saveUserInfo(state, { payload }) {
+      console.log(payload, '保存用户信息');
+      return {
+        ...state,
+        userInfo: payload
+      }
+    },
     loginStatus(state, { payload }) {
       return {
         ...state,

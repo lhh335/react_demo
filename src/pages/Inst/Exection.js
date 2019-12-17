@@ -7,7 +7,7 @@ const Exection = ({ app, dispatch }) => {
     <div
       style={{ width: "100%", display: "flex", justifyContent: "space-around" }}
     >
-      <h1>指令执行页面</h1>
+      <h1>业绩收入页面</h1>
     </div>
   );
 };

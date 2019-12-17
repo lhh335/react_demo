@@ -8,6 +8,7 @@ function RouterConfig({ history }) {
     <div>
       <Router history={history}>
         <Route path="/" component={Login} />
+        <Route path="/user" component={Login} />
         <Route path="/main" component={Main} />
       </Router>
     </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "dva";
+import { routerRedux } from 'dva/router';
 import { AccessRouter } from "./AccessRouter";
 import styles from "./main.css";
 
@@ -72,13 +73,41 @@ class Sider extends React.Component {
    * 顶部导航栏
    */
   renderNavigation = () => {
+    let userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      userInfo = JSON.parse(userInfo);
+    } else {
+      userInfo = {};
+    }
+    console.log(userInfo, '用户信息');
     return (
       <div className={styles.navi_wrapper}>
-        <p style={{ fontSize: 16 }}>IMS投资管理系统</p>
-        <p>您好，admin</p>
+        <p style={{ fontSize: 16 }}>美图后台管理系统</p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {userInfo.username === 'admin' ?
+            <div className={styles.addUser} onClick={() => { this.handleUser('add') }}>添加用户</div> : null
+          }
+          {userInfo.username === 'admin' ?
+            <div className={styles.addUser} onClick={() => { this.handleUser('del') }}>删除用户</div> : null
+          }
+          <div className={styles.addUser} onClick={() => { this.handleUser('modify') }}>修改密码</div>
+          <p>您好，{userInfo.username}</p>
+        </div>
       </div>
     );
   };
+
+  /**
+   * 点击添加用户
+   */
+  handleUser = (type) => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/user',
+      query: {
+        type
+      }
+    }))
+  }
 
   /**
    * 侧边导航
