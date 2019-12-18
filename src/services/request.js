@@ -1,9 +1,12 @@
 import fetch from "dva/fetch";
+import { routerRedux } from 'dva/router';
 
 function setParams(data, method) {
   let params = { method };
+  const token = localStorage.getItem('token');
   let headers = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    token
   };
 
   params = Object.assign(params, { headers: headers });
@@ -18,6 +21,12 @@ function parseJSON(response) {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
+  } else if (response.status === 401) {
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('isLogin');
+    routerRedux.replace({
+      pathname: '/'
+    })
   }
 
   const error = new Error(response.statusText);

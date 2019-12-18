@@ -55,7 +55,7 @@ export default {
         sessionStorage.removeItem('isLogin');
         yield call(delay, 3000);
         yield put(routerRedux.replace({
-          pathname: '/'
+          pathname: '/main'
         }))
       }
     },
@@ -107,6 +107,7 @@ export default {
           type: 'loginStatus',
           payload: true
         })
+        localStorage.setItem('token', data.token);
         yield put({
           type: 'saveUserInfo',
           payload: data
@@ -135,7 +136,9 @@ export default {
           payload: {}
         })
         localStorage.removeItem("userInfo");
-        yield put(routerRedux.push(""));
+        yield put(routerRedux.replace({
+          pathname: '/'
+        }));
         yield put({
           type: 'loginStatus',
           payload: false

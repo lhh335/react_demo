@@ -21,8 +21,8 @@ export const login = async (payload) => {
  * 
  * 退出
  */
-export const logout = async ({ payload }) => {
-  return requestGet(apiName.LocalApiName.userLogout, {
+export const logout = async ({ payload = {} }) => {
+  return requestPost(apiName.LocalApiName.userLogout, {
     body: JSON.stringify(payload)
   });
 };
@@ -31,7 +31,7 @@ export const logout = async ({ payload }) => {
  * 
  * 项目初始化
  */
-export const init = async ({ payload }) => {
+export const init = async () => {
   return requestGet(apiName.LocalApiName.init);
 };
 
