@@ -12,7 +12,7 @@ const Login = ({
   location
 }) => {
   const query = location.query || {};
-  const btn = location.pathname === '/user' ? query.type === 'add' ? '添加' : query.type === 'add' ? '删除' : '修改' : '登录';
+  const btn = location.pathname === '/user' ? query.type === 'add' ? '添加' : query.type === 'del' ? '删除' : '修改' : '登录';
   const { loginLoading, loginErrorMsg } = app;
   var uri = "https://t.alipayobjects.com/images/T1QUBfXo4fXXXXXXXX.png";
   function handleOk() {

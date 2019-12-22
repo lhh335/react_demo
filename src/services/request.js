@@ -6,8 +6,8 @@ function setParams(data, method) {
   const token = localStorage.getItem('token');
   let headers = {
     "Content-Type": "application/json",
-    token
   };
+  !!token && Object.assign(headers, { token });
 
   params = Object.assign(params, { headers: headers });
   params = Object.assign(params, data);

@@ -38,7 +38,7 @@ export default {
       const { status = {}, data = {} } = yield call(init, {});
       const sideMenus = data.sideMenus || localStorage.getItem('sideMenus') || [];
       localStorage.setItem('sideMenus', JSON.stringify(sideMenus));
-      localStorage.setItem('token', data.token);
+      !!data.token && localStorage.setItem('token', data.token);
       if (status.code === 10000) {
         localStorage.setItem('isLogin', true);
         yield put(routerRedux.replace({
@@ -56,7 +56,7 @@ export default {
       if (status.code === 10000) {
 
         message.success('修改密码成功', 2);
-        localStorage.removeItem('isLogin');
+        // localStorage.removeItem('isLogin');
         yield call(delay, 3000);
         yield put(routerRedux.replace({
           pathname: '/main'
