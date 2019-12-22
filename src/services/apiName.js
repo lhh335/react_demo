@@ -1,7 +1,7 @@
 const LocalApiName = {
   userLogin: "http://127.0.0.1:9001/api/v1/login",
   userLogout: "http://127.0.0.1:9000/api/v1/logout",
-  init: "http://127.0.0.1:9000/api/v1/init/2004?token=7876&time=12345678",
+  init: "http://127.0.0.1:9000/api/v1/init/2004/1002",
   adduser: 'http://127.0.0.1:9000/api/v1/adduser',
   deluser: 'http://127.0.0.1:9000/api/v1/deluser',
   modifyPwd: 'http://127.0.0.1:9000/api/v1/modifyPwd'

@@ -22,8 +22,7 @@ export default {
     setup({ dispatch, history }) {
       dispatch({ type: 'init' })
       history.listen(location => {
-        console.log(location, '历史');
-        const isLogin = sessionStorage.getItem('isLogin');
+        const isLogin = localStorage.getItem('isLogin');
         if (!isLogin && location.pathname === "/main") {
           dispatch(routerRedux.replace({ pathname: "/" }));
           return;
@@ -37,13 +36,18 @@ export default {
   effects: {
     *init({ payload }, { call, put }) {
       const { status = {}, data = {} } = yield call(init, {});
+      const sideMenus = data.sideMenus || localStorage.getItem('sideMenus') || [];
+      localStorage.setItem('sideMenus', JSON.stringify(sideMenus));
+      localStorage.setItem('token', data.token);
       if (status.code === 10000) {
-        const sideMenus = data.sideMenus || sessionStorage.getItem('sideMenus') || {};
-        sessionStorage.setItem('sideMenus', JSON.stringify(sideMenus));
+        localStorage.setItem('isLogin', true);
+        yield put(routerRedux.replace({
+          pathname: '/main'
+        }))
       }
     },
     // 修改密码
-    *modifyuser({ payload }, { call, put }){
+    *modifyuser({ payload }, { call, put }) {
       const { password } = payload;
       if (typeof password === 'string') {
         payload.password = encrypt(payload.password);
@@ -52,7 +56,7 @@ export default {
       if (status.code === 10000) {
 
         message.success('修改密码成功', 2);
-        sessionStorage.removeItem('isLogin');
+        localStorage.removeItem('isLogin');
         yield call(delay, 3000);
         yield put(routerRedux.replace({
           pathname: '/main'
@@ -74,7 +78,7 @@ export default {
       }
 
     },
-    *deluser({ payload }, { call, put }){
+    *deluser({ payload }, { call, put }) {
       const { password } = payload;
       if (typeof password === 'string') {
         payload.password = encrypt(payload.password);
@@ -113,7 +117,7 @@ export default {
           payload: data
         })
         localStorage.setItem("userInfo", JSON.stringify(data));
-        sessionStorage.setItem('isLogin', true);
+        localStorage.setItem('isLogin', true);
         yield put(routerRedux.push({ pathname: "/main" }));
       } else {
         yield put({
@@ -130,7 +134,7 @@ export default {
     *logout({ payload }, { call, put }) {
       var { status, data = {} } = yield call(logout, { payload });
       if (status.code === 10000) {
-        sessionStorage.removeItem('isLogin');
+        localStorage.removeItem('isLogin');
         yield put({
           type: 'saveUserInfo',
           payload: {}
@@ -148,7 +152,6 @@ export default {
   },
   reducers: {
     saveUserInfo(state, { payload }) {
-      console.log(payload, '保存用户信息');
       return {
         ...state,
         userInfo: payload

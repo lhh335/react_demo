@@ -44,7 +44,7 @@ class Sider extends React.Component {
     const root = $("#root");
     data_reactroot.style.height = root.get(0).offsetHeight + "px";
     // 侧边导航菜单
-    const sideMenus = sessionStorage.getItem("sideMenus");
+    const sideMenus = localStorage.getItem("sideMenus");
     this.props.dispatch({
       type: "app/saveSideMenus",
       payload: JSON.parse(sideMenus)

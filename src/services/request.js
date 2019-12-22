@@ -21,12 +21,6 @@ function parseJSON(response) {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
-  } else if (response.status === 401) {
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('isLogin');
-    routerRedux.replace({
-      pathname: '/'
-    })
   }
 
   const error = new Error(response.statusText);
@@ -47,6 +41,13 @@ export function requestPost(url, body) {
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
+      if (data.status.code === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLogin');
+        routerRedux.replace({
+          pathname: '/'
+        })
+      }
       return data;
     })
     .catch(err => ({ err }));
@@ -65,6 +66,13 @@ export function requestDelete(url, body) {
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
+      if (data.status.code === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLogin');
+        routerRedux.replace({
+          pathname: '/'
+        })
+      }
       return data;
     })
     .catch(err => ({ err }));
@@ -83,6 +91,13 @@ export function requestPut(url, body) {
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
+      if (data.status.code === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLogin');
+        routerRedux.replace({
+          pathname: '/'
+        })
+      }
       return data;
     })
     .catch(err => ({ err }));
@@ -96,11 +111,18 @@ export function requestPut(url, body) {
  * @return {object}           An object containing either "data" or "err"
  */
 export function requestGet(url, body) {
-  // const params = setParams(body);
-  return fetch(url)
+  const params = setParams({}, 'GET');
+  return fetch(url, params)
     .then(checkStatus)
     .then(parseJSON)
     .then(data => {
+      if (data.status.code === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isLogin');
+        routerRedux.replace({
+          pathname: '/'
+        })
+      }
       return data;
     })
     .catch(err => ({ err }));
