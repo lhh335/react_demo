@@ -82,7 +82,7 @@ class Sider extends React.Component {
     console.log(userInfo, '用户信息');
     return (
       <div className={styles.navi_wrapper}>
-        <p style={{ fontSize: 16 }}>美图后台管理系统</p>
+        <p style={{ fontSize: 16 }}>后台管理系统</p>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {userInfo.username === 'admin' ?
             <div className={styles.addUser} onClick={() => { this.handleUser('add') }}>添加用户</div> : null

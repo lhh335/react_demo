@@ -60,7 +60,7 @@ const Login = ({
       <div style={styles.loginView}>
         <div style={styles.loginHead}>
           <img style={styles.loginImg} src={uri} />
-          <span style={styles.loginText}>美图后台管理系统</span>
+          <span style={styles.loginText}>后台管理系统</span>
         </div>
         <div style={styles.loginBody}>
           <form style={{ width: "80%" }}>
