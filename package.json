@@ -25,7 +25,8 @@
     "rc-tween-one": "^1.2.5",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
-    "react-style": "^0.5.5"
+    "react-style": "^0.5.5",
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
